@@ -70,15 +70,20 @@ namespace Assets.Scripts.ULinkUtils
 
             File.AppendAllText(fullFileName, initTimeHeader + Environment.NewLine);
 
-            foreach (var line in dataLines)
+            /*foreach (var line in dataLines)
             {
                 File.AppendAllText(fullFileName, line);
-            }
+            }*/
+
+            //System.IO.File.WriteAllLines(fullFileName, dataLines.Select(x => string.Join("\n", x)));
+
+            System.IO.File.AppendAllLines(fullFileName, dataLines);
 
             string endTimeHeader = "endTime" + "\t" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + "\t" + GlobalSettings.DateTimeToMS(DateTime.Now);
             System.IO.File.AppendAllText(fullFileName, endTimeHeader + Environment.NewLine);
 
             dataLines.Clear();
+            
         }
     }
 }
