@@ -2,7 +2,11 @@
 
 using Tobii.G2OM;
 using UnityEngine;
+using VRsqrCore;
 using ViveSR.anipal.Eye;
+using System.IO;
+using System;
+using System.Globalization;
 
 namespace Tobii.XR.Examples
 {
@@ -24,6 +28,13 @@ namespace Tobii.XR.Examples
         // OUT 
         public float gazeTime;
         public float minGazeTime;
+        public float totalGazeDur = 0f;  // the accumulated total gaze duration over this object in the current trial
+        public float totalGazeTimes = 0f;  // the number of separate gaze events on this object in the current trial
+
+        // IN
+        public ULinkBool_In isCorrectInBee;  // IN FROM controllerProjection of TargetBeeSelection
+        public ULinkString_In outputPath; // IN FROM GLOBAL SETTINGS
+        public ULinkString_In subFolder;
 
 
 
@@ -44,6 +55,8 @@ namespace Tobii.XR.Examples
                 //_targetColor = _originalColor;
                 endGazeTime = Time.time;
                 gazeTime = Mathf.Max(endGazeTime - startGazeTime, gazeTime);
+                totalGazeDur += gazeTime;
+                totalGazeTimes++;
                 // manual additions to template script (Rony) to log gaze at the image 
                 RecordLog("endGazeTime" + "\t" + endGazeTime);
                 RecordLog("GazeDuration" + "\t" + gazeTime);
@@ -91,5 +104,24 @@ namespace Tobii.XR.Examples
             gazeTime = 0f;
 
         }
+
+        private void RecordAtGazePrint()
+        {
+            // Write the file in a format readable by ParseScrambledMats - FOR REPLAY PURPOSES
+            string subjectPath = outputPath.val + "\\" + subFolder.val;
+            string subjectScramblePath = subjectPath + "\\" + gameObject.name + "RecordAtGazeBackup.txt"; // current scramble locations
+
+            using (TextWriter tw = new StreamWriter(subjectScramblePath, true))
+            {
+                tw.WriteLine("CurrentTime" + "\t"+ DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + "\t" + "totalGazeDur" + "\t" + totalGazeDur + "\t" + "totalGazeTimes" + "\t" + totalGazeTimes);
+            }
+        }
+
+
+        public void isCorrectInBeeHandler()
+        {
+            RecordAtGazePrint();
+        }
+
     }
 }
