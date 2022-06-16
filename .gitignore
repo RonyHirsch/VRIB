@@ -57,17 +57,3 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
-
-# Scene related things
-Assets/Animals/
-Assets/awarenessMats/
-Assets/bees/
-Assets/Benches/
-Assets/billboardMats/
-Assets/buildingMats/
-Assets/city/
-Assets/ETMats/
-Assets/Models/
-Assets/Prefabs/
-Assets/Roads_Set/
-Assets/Resources/
