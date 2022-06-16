@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRsqrCore;
 using System.Linq;
+using System;
+using System.Globalization;
 
 
 /*
@@ -32,6 +34,7 @@ public class BusMotion : ULinkBase
     // private
     private float startTime; // documents the time we start
     private bool doOnce = false;
+    private bool printOnce = false; // This is used in order to log the REAL start of the trial
 
     // Start is called before the first frame update
     void Start()
@@ -85,6 +88,7 @@ public class BusMotion : ULinkBase
         if (isValidationEnd.val)
         {
             startTime = Time.realtimeSinceStartup;
+            RecordLog("RealTrialStart" + "\t" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture));
         }
         
     }
